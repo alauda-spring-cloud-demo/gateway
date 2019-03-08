@@ -1,7 +1,22 @@
+rabbit:
+  host: rabbitmq
+  port: 5672
+  web-stomp-port: 61613
+  username: 'rabbit'
+  password: 'oKug28bCBybU'
 spring:
   application:
       name: gateway
+  rabbitmq:
+    addresses: amqp://${rabbit.host}:${rabbit.port}
+    username: ${rabbit.username}
+    password: ${rabbit.password}
+    virtual-host: /
   cloud:
+    stream:
+      binders: # 在此处配置要绑定的rabbitmq的服务信息；
+        defaultRabbit: # 表示定义的名称，用于于binding整合
+          type: rabbit # 消息组件类型
     config:
       name: ${spring.application.name}
       fail-fast: true
@@ -11,3 +26,23 @@ spring:
 logging:
   level:
     org.springframework.security: debug
+---
+spring:
+  profiles: default
+rabbit:
+  host: rabbitmq.linkme.org.cn
+---
+spring:
+  profiles: dev
+rabbit:
+  host: rabbitmq-dev
+---
+spring:
+  profiles: prod
+rabbit:
+  host: rabbitmq-prod
+---
+spring:
+  profiles: test
+rabbit:
+  host: rabbitmq-test
