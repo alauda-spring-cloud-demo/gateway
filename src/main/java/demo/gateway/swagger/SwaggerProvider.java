@@ -1,6 +1,7 @@
 package demo.gateway.swagger;
 
 import lombok.AllArgsConstructor;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.gateway.config.GatewayProperties;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.support.NameUtils;
@@ -12,6 +13,7 @@ import springfox.documentation.swagger.web.SwaggerResourcesProvider;
 import java.util.ArrayList;
 import java.util.List;
 
+@RefreshScope
 @Component
 @Primary
 @AllArgsConstructor
@@ -30,10 +32,10 @@ public class SwaggerProvider implements SwaggerResourcesProvider {
         //结合配置的route-路径(Path)，和route过滤，只获取有效的route节点
         gatewayProperties.getRoutes().stream().filter(routeDefinition -> routes.contains(routeDefinition.getId()))
                 .forEach(routeDefinition -> routeDefinition.getPredicates().stream()
-                        .filter(predicateDefinition -> ("Path").equalsIgnoreCase(predicateDefinition.getName()))
-                        .forEach(predicateDefinition -> resources.add(swaggerResource(routeDefinition.getId(),
-                                predicateDefinition.getArgs().get(NameUtils.GENERATED_NAME_PREFIX + "0")
-                                        .replace("/**", API_URI)))));
+                                                    .filter(predicateDefinition -> ("Path").equalsIgnoreCase(predicateDefinition.getName()))
+                                                    .forEach(predicateDefinition -> resources.add(swaggerResource(routeDefinition.getId(),
+                                                            predicateDefinition.getArgs().get(NameUtils.GENERATED_NAME_PREFIX + "0")
+                                                                    .replace("/**", API_URI)))));
         return resources;
     }
 
