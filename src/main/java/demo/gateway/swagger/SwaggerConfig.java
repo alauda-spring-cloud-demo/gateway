@@ -3,9 +3,9 @@ package demo.gateway.swagger;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.*;
 import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
@@ -16,9 +16,10 @@ import springfox.documentation.swagger.web.*;
 import java.util.Arrays;
 import java.util.List;
 
-@RestController
-@RequestMapping("/swagger-resources")
+@RefreshScope
+@Configuration
 public class SwaggerConfig {
+
     @Value("${swagger.oauth.base-url}")
     private String oAuthBaseUri;
 
